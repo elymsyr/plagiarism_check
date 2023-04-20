@@ -35,7 +35,10 @@ class Text:
         tokenizer = nltk.RegexpTokenizer('[a-zA-Z]\w+\'?\w*') # A custom regex tokenizer.
         spans = list(tokenizer.span_tokenize(self.text))
         # Take note of how many spans there are in the text
-        self.length = spans[-1:][-1:]
+        if spans:
+            self.length = (len(spans)*len(spans[0]))
+        else:
+            self.length = 0
         tokens = tokenizer.tokenize(self.text)
         tokens = [ token.lower() for token in tokens ] # make them lowercase
         stemmer = LancasterStemmer()
@@ -89,12 +92,16 @@ class Matcher():
     Does the text matching.
     """
     def __init__(self, textObjA, textObjB, threshold=3, cutoff=5, ngramSize=3, removeStopwords=True):
+
         """
         Takes as input two Text() objects, and matches between them.
         """
         self.threshold = threshold
         self.ngramSize = ngramSize
-        
+
+        self.textA = textObjA
+        self.textB = textObjB
+
         self.textAgrams = self.textA.ngrams(ngramSize)
         self.textBgrams = self.textB.ngrams(ngramSize)
 
@@ -135,7 +142,7 @@ class Matcher():
         match = self.getTokensText(text, start, length)
         before = self.getTokensText(text, start-context, context)
         after = self.getTokensText(text, start+length, context)
-        match = colored(match, 'red')
+        # match = colored(match, 'red')
         out = " ".join([before, match, after])
         out = out.replace('\n', ' ') # Replace newlines with spaces.
         out = re.sub('\s+', ' ', out)
@@ -175,8 +182,10 @@ class Matcher():
         if spansA is not None and spansB is not None:
             self.locationsA.append(spansA)
             self.locationsB.append(spansB)
-            line1 = ('%s: %s %s' % (colored(textA.label, 'green'), spansA, wordsA) )
-            line2 = ('%s: %s %s' % (colored(textB.label, 'green'), spansB, wordsB) )
+            # line1 = ('%s: %s %s' % (colored(textA.label, 'green'), spansA, wordsA) )
+            # line2 = ('%s: %s %s' % (colored(textB.label, 'green'), spansB, wordsB) )
+            line1 = ('%s: %s %s' % ("Source Index", spansA, wordsA) )
+            line2 = ('%s: %s %s' % ("Web Index", spansB, wordsB) )
             out = line1 + '\n' + line2
             return out
 
@@ -266,14 +275,13 @@ class Matcher():
 
         return self.healed_matches
 
-    def match(self):
+    def match(self,url_list):
         """ Gets and prints all matches. """
-
-        for num, match in enumerate(self.extended_matches):
+        num = 0
+        for match in enumerate(self.extended_matches):
+            num+=1
             # print('match: ', match)
             out = self.getMatch(match)
-            print('\n')
-            print('match %s:' % (num+1), flush=True)
-            print(out, flush=True)
-
-        return [self.numMatches, self.locationsA, self.locationsB]
+            with open(r'plagiarism\results\results.txt', "a", encoding="utf8") as result_file:
+                result_file.write((f"match {num} from {url_list[num-1]}"))()
+                result_file.write(f"\n{out}\n")
