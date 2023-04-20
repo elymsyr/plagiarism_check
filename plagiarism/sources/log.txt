@@ -1,0 +1,1 @@
+Text A,Text B,Threshold,Cutoff,N-Grams,Num Matches,Text A Length,Text B Length,Locations in A,Locations in B

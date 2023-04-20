@@ -1,0 +1,1 @@
+So this implies, that multiple handles can be held across multiple processes, without any write conflicts?

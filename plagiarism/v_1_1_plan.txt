@@ -1,0 +1,22 @@
+check and claer the files and folders
+
+check the source file
+divide source file into a list, each item about 30 word between 200 word
+
+
+get the first 5(or user input) url as list 
+(remember the latency between requests)
+for in loop
+with first url and get clear html text
+take the output and rewrite it then
+take it and append it to a new .txt file with url (ux is important)
+
+print the result file
+
+[
+
+write a func to rewrite the cmd output
+check every possible error
+work on and research how html request error works
+
+]
