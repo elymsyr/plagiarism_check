@@ -15,7 +15,7 @@ class HtmlSearch():
     def __init__(self):
         self.data = ""
         self.clear_data_url = []
-        self.query_number = 2
+        self.query_number = 1
         self.url_list()
         self.check_html()
     
